@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <!-- Featured Posts -->
+    <h2 class="text-warning">Searched Term - {{ keyword }}</h2>
+    <div class="row mb-2">
+        {% for i in blogs %}
+            <div class="col-md-6">
+                <div class="card border-0" >
+                <div class="card-body">
+                    <h3><a class='text-dark' href="{% url 'blogs' i.slug %}">{{ i.title }}</a></h3>
+                    <small class="mb-1 text-muted"> {{ i.created_at | timesince }} ago | {{ i.author }}</small>
+                    <p class="card-text">{{ i.short_description | truncatewords:25 }}</p>
+                </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock content %}
