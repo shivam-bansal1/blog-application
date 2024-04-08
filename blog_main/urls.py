@@ -20,11 +20,15 @@ from django.conf import settings
 from . import views
 from django.conf.urls.static import static
 from blogs import views as BlogsView
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path('category/', include('blogs.urls')),
     path('blogs/search/', BlogsView.search, name='search'),
-    path('<slug:slug>/', BlogsView.blogs, name='blogs'),
+    path('blogs/<slug:slug>/', BlogsView.blogs, name='blogs'),
+    path('register/', views.register, name='register'),
+    path('login/', views.login, name='login'),
+    path('logout/', views.logout, name='logout'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
