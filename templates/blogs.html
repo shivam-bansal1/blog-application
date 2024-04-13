@@ -22,7 +22,39 @@
                     <section class="mb-5">
                         <p class="fs-5 mb-4 text-muted">{{ single_blog.short_description }}</p>
                         <p class="fs-5 mb-4">{{ single_blog.blog_body }}</p>
-                        </section>
+
+                        <!-- Comment Section-->
+                        <h4>Comments ({{ comment_count }})</h4>
+                        {% if comments %}
+                            {% for comment in comments %}
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-text">
+                                            <p class='mb-0'>{{ comment }}</p>
+                                            <span class="text-muted">
+                                                <small>{{ comment.user }}</small>
+                                                <small> | {{ comment.updated_at | timesince }} ago</small>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            No comments yet.
+                        {% endif %}
+                        <br>
+                        {% if user.is_authenticated %}
+                            <div class="form-group">
+                                <form action="" method="POST">
+                                    {% csrf_token %}
+                                    <textarea class="form-control" name="comment" placeholder='Add a comment'></textarea>
+                                    <input type="submit" value="Submit" class="btn btn-primary mt-2">
+                                </form>
+                            </div>
+                        {% else %}
+                            Please <span><a href="{% url 'login' %}">login</a></span> to comment.
+                        {% endif %}
+                    </section>
                 </article>
             </div>
             <!-- Side widgets-->

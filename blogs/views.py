@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
-from .models import Blog, Category
+from .models import Blog, Category, Comment
+from django.http import HttpResponseRedirect
 
 # Create your views here.
 def posts_by_category(request, category_id) :
@@ -20,8 +21,21 @@ def posts_by_category(request, category_id) :
 def blogs(request, slug):
     single_blog = Blog.objects.get(status="Published", slug=slug)
 
+    if request.method == "POST":
+        comment = Comment()
+        comment.user = request.user
+        comment.blog = single_blog
+        comment.comment = request.POST['comment']              # name attribute of the html tag textarea in the template
+        comment.save()
+        return HttpResponseRedirect(request.path_info)
+    
+    comments = Comment.objects.filter(blog = single_blog)
+    comment_count = comments.count()
+
     context = {
         'single_blog' :single_blog,
+        'comments': comments,
+        'comment_count':comment_count,
     }
     return render(request, 'blogs.html', context)
 
